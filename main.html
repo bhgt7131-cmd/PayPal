@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Recommendations UI</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #f4f5f7;
+    }
+
+    .carousel-container {
+      width: 100%;
+      margin: 30px 0;
+      overflow-x: auto;
+      display: flex;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      padding-left: 16px;
+    }
+    .carousel-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .card {
+      flex: 0 0 calc(100% - 80px);  
+      height: 200px;
+      border-radius: 15px;
+      background: white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+      margin-bottom: 30px;
+      scroll-snap-align: start;
+      user-select: none;
+      margin-right: 30px;
+      min-width: 70%;
+      flex-shrink: 0;
+    }
+
+    .card-header {
+      padding:20px;
+    }
+
+    .card-header h3 {
+      font-size: 16px;
+      margin: 0;
+      color: #333;
+    }
+
+    .balance {
+      font-size: 36px;
+      font-weight: bold;
+      margin-top: 10px;
+      color: #000;
+    }
+
+    .card-footer {
+      background: #0070e0;
+      color: white;
+      padding: 28px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-footer span {
+      font-size: 12px;
+    }
+
+    .btn {
+      background:  #007AFF;
+      color: white;
+      padding: 10px 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: none;
+    }
+
+    .banner {
+      background: #e3f2fd;
+      padding: 20px;
+      margin: 10px 20px;
+      border-radius: 15px;
+      font-weight: bold;
+    }
+
+    .offer {
+      background: #5c2d91;
+      color: white;
+      margin: 10px 20px;
+      padding: 60px;
+      border-radius: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .offer button {
+      background: white;
+      color: #5c2d91;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .header {
+      padding: 20px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 0 12px;
+    }
+
+    .product-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 5px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+
+    .product-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+
+    .product-content {
+      padding: 10px;
+    }
+
+    .store {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 4px;
+    }
+
+    .title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .price {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .cashback {
+      font-size: 13px;
+      color: #009cde;
+    }
+
+    .product-actions {
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid #eee;
+      padding: 8px 0;
+    }
+
+    .product-actions button {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #888;
+    }
+
+    .product-actions button.active {
+      color: red;
+    }
+
+    .bottom-nav {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 60px;
+      border-top: 1px solid #ccc;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: white;
+    }
+
+    .nav-item {
+      text-align: center;
+      color: #666;
+      text-decoration: none;
+      font-size: 10px;
+    }
+
+    .nav-item img {
+      width: 15px;
+      height: 15px;
+      margin-bottom: 3px;
+    }
+
+    .nav-item.active {
+      color: black;
+      font-weight: bold;
+    }
+
+    .nav-item.send {
+      background-color: #007AFF;
+      padding: 8px;
+      border-radius: 50%;
+      margin-top: -30px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+    }
+
+    .nav-item.send img {
+      filter: invert(100%);
+      width: 15px;
+      height: 15px;
+    }
+
+    .top-bar {
+      width: 100%;
+      height: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      box-sizing: border-box;
+    }
+
+    .circle-btn {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.03);
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .circle-btn:hover {
+      background: #eef1f7;
+    }
+
+    svg {
+      width: 24px;
+      height: 24px;
+      stroke: #007aff;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .right-buttons {
+      display: flex;
+      gap: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="circle-btn" id="menuBtn">
+    <svg viewBox="0 0 24 24">
+      <line x1="4" y1="7" x2="20" y2="7" />
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <line x1="4" y1="17" x2="20" y2="17" />
+    </svg>
+  </div>
+
+  <div class="right-buttons">
+    <div class="circle-btn" id="qrBtn">
+      <svg viewBox="0 0 24 24">
+        <rect x="3" y="3" width="5" height="5"/>
+        <rect x="16" y="3" width="5" height="5"/>
+        <rect x="3" y="16" width="5" height="5"/>
+        <path d="M16 16h1v1h-1zM18 16h3v1h-3zM16 18h1v3h-1zM18 18h1v1h-1zM20 18h1v3h-1z"/>
+      </svg>
+    </div>
+    <div class="circle-btn" id="profileBtn">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 20c0-4 4-6 8-6s8 2 8 6"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- Cards with PayPal Balance -->
+<div class="carousel-container">
+  <div class="card">
+    <div class="card-header">
+      <h3><img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal" style="height: 18px; vertical-align: middle; margin-right: 6px;"> PayPal Balance</h3>
+      <div class="balance" id="balance1">€950,080.74</div>
+    </div>
+    <div class="card-footer">
+      <span>📥 Earn 3.80% APY.<br>Try PayPal Savings. No minimum balance and no fees.</span>
+      <span>›</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h3><img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg" alt="Crypto" style="height: 18px; vertical-align: middle; margin-right: 6px;">Crypto</h3>
+      <div class="balance">€330,080.74</div>
+    </div>
+    <div class="card-footer">
+      <span>📥 Earn 3.80% APY.<br>Invest in Bitcoin</span>
+      <span>›</span>
+    </div>
+  </div>
+</div>
+
+<div class="banner" onclick="alert('Manage subscriptions – coming soon')">
+  All your subscriptions, without the hassle
+</div>
+
+<div class="offer">
+  <div>
+    <strong>Taco Bell</strong><br>20% Cashback up to €10
+  </div>
+  <button onclick="alert('Offer saved!')">Save</button>
+</div>
+
+<div class="header">Recommended for you</div>
+
+<div class="grid">
+  <div class="product-card">
+    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80" alt="Art">
+    <div class="product-content">
+      <div class="store">Macy's</div>
+      <div class="title">Huge Artwork 24" x 18" Boho Garden III</div>
+      <div class="price">€200.00</div>
+      <div class="cashback">2% Cashback</div>
+    </div>
+    <div class="product-actions">
+      <button class="dismiss-btn">&times;</button>
+      <button class="like-btn">❤</button>
+    </div>
+  </div>
+
+  <div class="product-card">
+    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80" alt="Shoes">
+    <div class="product-content">
+      <div class="store">StockX</div>
+      <div class="title">Nike SB Dunk Low Diamond Men</div>
+      <div class="price">€375.00</div>
+      <div class="cashback">1% Cashback</div>
+    </div>
+    <div class="product-actions">
+      <button class="dismiss-btn">&times;</button>
+      <button class="like-btn">❤</button>
+    </div>
+  </div>
+
+  <div class="product-card">
+    <img src="https://images.unsplash.com/photo-1598327105666-5b89351aff97?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Tablet">
+    <div class="product-content">
+      <div class="store">Samsung</div>
+      <div class="title">Galaxy Tab S10 FE</div>
+      <div class="price">€749.99</div>
+      <div class="cashback">2% Cashback</div>
+    </div>
+    <div class="product-actions">
+      <button class="dismiss-btn">&times;</button>
+      <button class="like-btn">❤</button>
+    </div>
+  </div>
+
+  <div class="product-card">
+    <img src="https://images.unsplash.com/photo-1512436991641-6745cdb1723f?auto=format&fit=crop&w=400&q=80" alt="Polo">
+    <div class="product-content">
+      <div class="store">J.Crew</div>
+      <div class="title">Classic Polo Shirt</div>
+      <div class="price">€49.50</div>
+      <div class="cashback">2% Cashback</div>
+    </div>
+    <div class="product-actions">
+      <button class="dismiss-btn">&times;</button>
+      <button class="like-btn">❤</button>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-nav">
+  <a href="load.html?redirect=home.html" class="nav-item active">
+    <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="Home" />
+    <div>Home</div>
+  </a>
+  <a href="error.html" class="nav-item">
+    <img src="https://img.icons8.com/ios-filled/50/000000/wallet-app.png" alt="Accounts" />
+    <div>Accounts</div>
+  </a>
+  <a href="load.html?redirect=send.html" class="nav-item send">
+    <img src="https://img.icons8.com/ios-filled/50/ffffff/swap.png" alt="Send/Request" />
+    <div style="color: white; font-size: 10px;">Send</div>
+  </a>
+  <a href="load.html?redirect=activity.html" class="nav-item">
+    <img src="https://img.icons8.com/ios-filled/50/000000/receipt.png" alt="Activity" />
+    <div>Activity</div>
+  </a>
+  <a href="error.html" class="nav-item">
+    <img src="https://img.icons8.com/ios-filled/50/000000/shopping-bag.png" alt="Offers" />
+    <div>Offers</div>
+  </a>
+</div>
+
+<script>
+  const maxBalance = 930050.74;
+  let currentBalance = maxBalance;
+
+  function formatCurrency(amount) {
+    return '€' + amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  setInterval(() => {
+    const change = (Math.random() * 20000 - 10000).toFixed(2);
+    let newBalance = parseFloat(currentBalance) + parseFloat(change);
+    if (newBalance > maxBalance) newBalance = maxBalance;
+    if (newBalance < 0) newBalance = 0;
+    currentBalance = newBalance;
+    document.getElementById('balance1').textContent = formatCurrency(currentBalance);
+  }, 12000);
+
+  document.querySelectorAll('.like-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      button.classList.toggle('active');
+    });
+  });
+
+  document.querySelectorAll('.dismiss-btn').forEach(button => {
+    button.addEventListener('click', () => {
+      button.closest('.product-card').remove();
+    });
+  });
+
+  document.getElementById('menuBtn').onclick = function () {
+    window.location.href = 'menu.html';
+  };
+  document.getElementById('qrBtn').onclick = function () {
+    window.location.href = 'error.html';
+  };
+  document.getElementById('profileBtn').onclick = function () {
+    window.location.href = "load.html?redirect=profile.html";
+  };
+</script>
+
+</body>
+</html>
