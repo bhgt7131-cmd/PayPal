@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Review Payment</title>
+<style>
+  body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: #fff; padding: 20px; }
+  .top-bar { display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 18px; margin-bottom: 20px; }
+  .card { display: flex; align-items: center; margin-bottom: 20px; }
+  .card img { width: 60px; border-radius: 10px; margin-right: 15px; }
+  .card-info { flex: 1; }
+  .card-info small { display: block; color: #777; font-size: 13px; margin-top: 5px; }
+  .section { margin-bottom: 20px; }
+  .section-title { font-weight: bold; margin-bottom: 5px; display: flex; align-items: center; }
+  .small-text { font-size: 13px; color: #777; margin-top: 5px; }
+  .amount-row { display: flex; justify-content: space-between; margin: 10px 0; }
+  .total { font-weight: bold; font-size: 18px; }
+  .send-btn { width: 100%; background: #000; color: #fff; padding: 15px; font-size: 18px; border: none; border-radius: 30px; margin-top: 30px; cursor: pointer; }
+  hr { border: none; border-top: 1px solid #eee; margin: 15px 0; }
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  Review
+  <div style="font-size:24px; cursor:pointer;" onclick="goBack()">✖</div>
+</div>
+
+<div class="card">
+  <img src="https://www.gstatic.com/webp/gallery/1.jpg" alt="Card" />
+  <div class="card-info">
+    <div>RoarMoney</div>
+    <small>Debit (4210)</small>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">
+    👥 Friends and Family
+  </div>
+  <div class="small-text">
+    Buyer Protection does not apply to this payment.<br>
+    <a href="#" style="color:#0070f3; text-decoration:none;">Learn more about Buyer Protection</a>
+  </div>
+</div>
+
+<div class="section">
+  <div class="amount-row">
+    <div>Amount in USD</div>
+    <div id="amountDisplay">$0.00</div>
+  </div>
+
+  <div class="amount-row">
+    <div>Fee <span style="font-size:14px; cursor:pointer;">ℹ</span></div>
+    <div>$300.00</div>
+  </div>
+
+  <div class="amount-row total">
+    <div>Total</div>
+    <div id="totalDisplay">$0.00</div>
+  </div>
+</div>
+
+<button class="send-btn" onclick="sendPayment()">Send</button>
+
+<script>
+  function goBack() {
+    window.history.back();
+  }
+
+  function sendPayment() {
+    window.location.href = "load.html?redirect=confirmation.html";
+  }
+
+  const rawAmount = localStorage.getItem("sentAmount") || "0";
+  const formattedAmount = parseInt(rawAmount).toLocaleString() + ".00";
+
+  document.getElementById("amountDisplay").textContent = "$" + formattedAmount;
+  document.getElementById("totalDisplay").textContent = "$" + formattedAmount;
+</script>
+
+</body>
+</html>
