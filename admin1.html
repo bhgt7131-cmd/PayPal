@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin - Approve Access</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f9f9f9;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #007AFF;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      padding: 15px;
+      margin-bottom: 10px;
+      background: #ffffff;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-left: 10px;
+      padding: 5px 12px;
+      font-size: 14px;
+    }
+
+    #arrowContainer {
+      position: fixed;
+      bottom: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      z-index: 999;
+    }
+
+    #arrowContainer button {
+      font-size: 40px;
+      background-color: #007AFF;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: background-color 0.3s;
+    }
+
+    #arrowContainer button:hover {
+      background-color: #222;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Pending Access Requests</h2>
+  <ul id="requestsList">Loading...</ul>
+
+  <div id="arrowContainer">
+    <button id="adminArrow" title="Go to Admin2">&#10148;</button>
+    <button id="uploadArrow" title="Go to Upload">&#10148;</button>
+  </div>
+
+  <!-- Firebase scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGSLMl3Ru0C3t6hg4z9xOPsKn6xqQ0vEI",
+      authDomain: "authentication2-826d3.firebaseapp.com",
+      projectId: "authentication2-826d3",
+      storageBucket: "authentication2-826d3.appspot.com",
+      messagingSenderId: "511159803319",
+      appId: "1:511159803319:web:bfbe7f7bbc5b3887bf5c32",
+      measurementId: "G-8N4SJBFTCY"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const list = document.getElementById('requestsList');
+
+    db.collection('access_requests')
+      .where('status', '==', 'pending')
+      .onSnapshot(snapshot => {
+        list.innerHTML = '';
+
+        if (snapshot.empty) {
+          list.textContent = 'No pending requests';
+          return;
+        }
+
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const li = document.createElement('li');
+
+          const name = data.name || 'Unnamed';
+          const time = data.requestedAt?.toDate?.().toLocaleString() || 'Unknown time';
+
+          li.innerHTML = `
+            <strong>${name}</strong> — requested on ${time}
+            <button>Approve</button>
+            <button>Deny</button>
+          `;
+
+          const approveBtn = li.querySelector('button:nth-of-type(1)');
+          approveBtn.onclick = () => {
+            db.collection('access_requests').doc(doc.id).update({ status: 'approved' });
+          };
+
+          const denyBtn = li.querySelector('button:nth-of-type(2)');
+          denyBtn.onclick = () => {
+            db.collection('access_requests').doc(doc.id).update({ status: 'denied' });
+          };
+
+          list.appendChild(li);
+        });
+      });
+
+    document.getElementById('adminArrow').addEventListener('click', () => {
+      window.location.href = "admin2.html";
+    });
+
+    document.getElementById('uploadArrow').addEventListener('click', () => {
+      window.location.href = "upload.html";
+    });
+  </script>
+</body>
+</html>
