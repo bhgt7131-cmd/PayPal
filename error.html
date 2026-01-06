@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>PayPal: Internal Error</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding-top: 80px;
+      color: #333;
+    }
+    img {
+      width: 60px;
+      margin-bottom: 30px;
+    }
+    h2 {
+      font-size: 22px;
+      color: #333;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 15px;
+      color: #666;
+      margin-bottom: 30px;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid orange;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    button {
+      background-color: #0070ba;
+      color: #fff;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 20px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <img src="https://www.paypalobjects.com/images/shared/paypal-logo-129x32.svg" alt="PayPal Logo">
+  <div class="spinner"></div>
+  <h2>PayPal: Internal Error</h2>
+  <p>We’re sorry. Your request cannot be processed at the moment. Please try again later.</p>
+
+  <button onclick="goBack()">Back to Homepage</button>
+
+  <script>
+    // Automatically go back after 3 seconds
+    setTimeout(() => {
+      window.history.back();
+    }, 3000);
+
+    // Manual back button as fallback
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+
+</body>
+</html>
