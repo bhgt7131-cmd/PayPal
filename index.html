@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+  <title>Request Access</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background-color: #f2f2f2;
+      text-align: center;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      font-size: 16px;
+    }
+    #message {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    h2 {
+      color: #007AFF;
+    }
+    #closeBtnContainer {
+      margin-top: 50px;
+    }
+    #closeBtn {
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: #888;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  
+  <h2>Request Access</h2>
+  <form id="requestForm">
+    <input type="text" id="name" placeholder="Enter your name" required />
+    <button type="submit">Request Access</button>
+  </form>
+
+  <p id="message"></p>
+
+  <div id="closeBtnContainer">
+    <button id="closeBtn" title="To Admin Page" onclick="window.location.href='admin.html'">&times;</button>
+  </div>
+
+  <!-- Firebase v9 Modular SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBGSLMl3Ru0C3t6hg4z9xOPsKn6xqQ0vEI",
+      authDomain: "authentication2-826d3.firebaseapp.com",
+      projectId: "authentication2-826d3",
+      storageBucket: "authentication2-826d3.appspot.com",
+      messagingSenderId: "511159803319",
+      appId: "1:511159803319:web:bfbe7f7bbc5b3887bf5c32",
+      measurementId: "G-8N4SJBFTCY"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getFirestore(app);
+
+    const form = document.getElementById('requestForm');
+    const msg = document.getElementById('message');
+
+    // Remove stored access ID on each visit
+    localStorage.removeItem('accessRequestId');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      if (!name) return;
+
+      try {
+        const requestRef = await addDoc(collection(db, "access_requests"), {
+          name,
+          status: 'pending',
+          requestedAt: new Date()
+        });
+
+        msg.textContent = 'Request sent! Please wait for admin approval...';
+
+        // Live monitoring of the request
+        onSnapshot(doc(db, "access_requests", requestRef.id), (docSnap) => {
+          if (!docSnap.exists()) return;
+          const data = docSnap.data();
+
+          if (data.status === 'approved') {
+            msg.textContent = '✅ Approved! Redirecting...';
+            setTimeout(() => {
+              window.location.href = "start.html";
+            }, 1500);
+          } else if (data.status === 'denied') {
+            msg.textContent = '❌ Denied. Please try again later.';
+          }
+        });
+
+        form.reset();
+      } catch (err) {
+        msg.textContent = 'Error: ' + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
