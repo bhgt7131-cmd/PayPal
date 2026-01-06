@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Profile</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f6f7fb;
+      color: #000;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 15px 20px;
+    }
+
+    .back-arrow {
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .account-selector {
+      background-color: white;
+      padding: 5px 12px;
+      border-radius: 25px;
+      font-weight: 500;
+      font-size: 14px;
+      box-shadow: 0 0 4px rgba(0,0,0,0.1);
+    }
+
+    .bell {
+      position: relative;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .badge {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      background-color: red;
+      color: white;
+      font-size: 10px;
+      padding: 1px 5px;
+      border-radius: 10px;
+    }
+
+    .profile-card {
+      background-color: #fff;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      padding: 30px 20px 20px;
+      text-align: center;
+      margin-top: -5px;
+    }
+
+    .profile-image {
+      background-color: #e1f3eb;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      margin: -45px auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .profile-image img {
+      width: 30px;
+    }
+
+    .edit-button {
+      margin-top: 10px;
+      border: 1px solid #ccc;
+      padding: 6px 16px;
+      border-radius: 20px;
+      background-color: white;
+      font-weight: 500;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .section {
+      background-color: #fff;
+      margin-top: 15px;
+      padding: 10px 0;
+    }
+
+    .section-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .section-item:hover {
+      background-color: #f2f2f2;
+    }
+
+    .section-item img.icon {
+      width: 20px;
+      height: 20px;
+      margin-right: 15px;
+    }
+
+    .section-item span {
+      font-size: 15px;
+    }
+
+    .username {
+      font-size: 14px;
+      color: #007aff;
+      margin-top: 5px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div class="back-arrow" onclick="window.location.href='home.html'">←</div>
+    <div class="account-selector">Business Account ⌄</div>
+    <div class="bell" onclick="alert('Notifications')">
+      🔔
+      <div class="badge">1</div>
+    </div>
+  </div>
+
+  <div class="profile-card">
+    <div class="profile-image">
+      <img src="https://img.icons8.com/ios-filled/50/000000/user.png" />
+    </div>
+    <div style="font-size: 18px; font-weight: 600;">BASF SE</div>
+    <div class="username">@basfse</div>
+    <div class="edit-button" onclick="alert('Edit profile')">Edit</div>
+  </div>
+
+  <div class="section">
+    <div class="section-item" onclick="alert('Invite Friends')">
+      <img class="icon" src="https://img.icons8.com/emoji/48/gem-stone.png" />
+      <span>Invite Friends</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-item" onclick="alert('Account Info')">
+      <img class="icon" src="https://img.icons8.com/ios/50/user--v1.png" />
+      <span>Account Information</span>
+    </div>
+    <div class="section-item" onclick="alert('Login & Security')">
+      <img class="icon" src="https://img.icons8.com/ios/50/security-checked.png" />
+      <span>Login & Security</span>
+    </div>
+    <div class="section-item" onclick="alert('Data & Privacy')">
+      <img class="icon" src="https://img.icons8.com/ios/50/privacy.png" />
+      <span>Data & Privacy</span>
+    </div>
+    <div class="section-item" onclick="alert('Notification Settings')">
+      <img class="icon" src="https://img.icons8.com/ios/50/appointment-reminders--v1.png" />
+      <span>Notification Settings</span>
+    </div>
+    <div class="section-item" onclick="alert('Marketing Preferences')">
+      <img class="icon" src="https://img.icons8.com/ios/50/discount--v1.png" />
+      <span>Marketing Preferences</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-item" onclick="alert('Direct Deposit')">
+      <img class="icon" src="https://img.icons8.com/ios/50/money-transfer.png" />
+      <span>Direct Deposit</span>
+    </div>
+    <div class="section-item" onclick="alert('Statements & Taxes')">
+      <img class="icon" src="https://img.icons8.com/ios/50/document--v1.png" />
+      <span>Statements & Taxes</span>
+    </div>
+    <div class="section-item" onclick="alert('Message Center')">
+      <img class="icon" src="https://img.icons8.com/ios/50/chat-message.png" />
+      <span>Message Center</span>
+    </div>
+  </div>
+
+</body>
+</html>
