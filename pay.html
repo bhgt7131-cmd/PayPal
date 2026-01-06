@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pull Up to Confirm</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #f5f5f5;
+    }
+    .search-bar { padding: 16px; }
+    .search-bar input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 25px;
+      border: none;
+      background: #eaeaea;
+    }
+    .list { padding: 0 16px; display: none; }
+    .list.show { display: block; }
+    .user {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #ddd;
+      cursor: pointer;
+    }
+    .avatar, .avatar-large {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+      overflow: hidden;
+    }
+    .avatar-large {
+      width: 56px;
+      height: 56px;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .avatar img, .avatar-large img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .username { font-size: 16px; }
+    .bottom-sheet {
+      position: fixed;
+      bottom: -100%;
+      left: 0;
+      width: 100%;
+      background: white;
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.2);
+      transition: bottom 0.3s ease;
+    }
+    .bottom-sheet.show { bottom: 0; }
+    .bottom-sheet h2 { margin: 0; font-size: 18px; }
+    .bottom-sheet p { font-weight: bold; margin-top: 20px; }
+    .continue-button {
+      margin-top: 20px;
+      padding: 14px;
+      width: 100%;
+      font-size: 16px;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+    }
+    .close-btn {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      font-size: 24px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="search-bar">
+  <input id="searchInput" type="text" placeholder="Name, Username, Email, Mobile Number" autofocus oninput="handleTyping()" />
+</div>
+
+<div class="list" id="userList">
+  <div class="user" onclick="selectUser()" id="userItem" style="display: none;">
+    <div class="avatar" id="userAvatar">--</div>
+    <div class="username" id="userName">---</div>
+  </div>
+</div>
+
+<div id="bottomSheet" class="bottom-sheet">
+  <div class="close-btn" onclick="closeSheet()">×</div>
+  <div class="avatar-large" id="sheetAvatar">--</div>
+  <h2 id="sheetName">---</h2>
+  <p>Is this the right person?</p>
+  <button class="continue-button" onclick="continueAction()">Continue</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDPWgVdVTjD_m4BKslwSceTcWuFcNfqU1w",
+  authDomain: "fir-7083c.firebaseapp.com",
+  projectId: "fir-7083c",
+  storageBucket: "fir-7083c.appspot.com",
+  messagingSenderId: "281874138708",
+  appId: "1:281874138708:web:a593d260193ad9192acfc1",
+  measurementId: "G-0FPM8HG3RR"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const storedName = localStorage.getItem("receiver_name") || "Unknown";
+
+function getInitials(name) {
+  return name.replace(/[^a-zA-Z0-9 ]/g, '')
+    .split(" ")
+    .map(word => word[0] ? word[0].toUpperCase() : '')
+    .join('')
+    .substring(0, 2);
+}
+
+let typingTimeout;
+
+function handleTyping() {
+  const input = document.getElementById("searchInput").value.trim();
+  clearTimeout(typingTimeout);
+  document.getElementById("userList").classList.remove("show");
+  document.getElementById("userItem").style.display = "none";
+
+  if (input.length > 0) {
+    typingTimeout = setTimeout(() => {
+      document.getElementById("userName").innerText = storedName;
+      const userAvatar = document.getElementById("userAvatar");
+
+      db.collection("user_photos").doc("globalProfile").get().then(doc => {
+        if (doc.exists && doc.data().image) {
+          userAvatar.innerHTML = '<img src="' + doc.data().image + '" alt="Avatar">';
+        } else {
+          userAvatar.textContent = getInitials(storedName);
+        }
+      });
+
+      document.getElementById("userList").classList.add("show");
+      document.getElementById("userItem").style.display = "flex";
+    }, 5000);
+  }
+}
+
+function selectUser() {
+  document.getElementById("sheetName").innerText = storedName;
+  const sheetAvatar = document.getElementById("sheetAvatar");
+
+  db.collection("user_photos").doc("globalProfile").get().then(doc => {
+    if (doc.exists && doc.data().image) {
+      sheetAvatar.innerHTML = '<img src="' + doc.data().image + '" alt="Avatar">';
+    } else {
+      sheetAvatar.textContent = getInitials(storedName);
+    }
+  });
+
+  document.getElementById("bottomSheet").classList.add("show");
+}
+
+function closeSheet() {
+  document.getElementById("bottomSheet").classList.remove("show");
+}
+
+function continueAction() {
+  window.location.href = "load.html?redirect=amount.html";
+}
+</script>
+
+</body>
+</html>
