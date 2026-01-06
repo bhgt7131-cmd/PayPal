@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payment Type</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background: #fff;
+    margin: 0;
+  }
+
+  h2 {
+    font-weight: normal;
+    text-align: center;
+  }
+
+  .option {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+  }
+
+  .option.selected {
+    border: 2px solid #000;
+    background: #f0f0f0;
+  }
+
+  .option-icon {
+    font-size: 25px;
+    margin-right: 15px;
+  }
+
+  .option-content {
+    flex: 1;
+  }
+
+  .option-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .option-desc {
+    font-size: 14px;
+    color: #555;
+  }
+
+  .checkmark {
+    font-size: 20px;
+    color: green;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    display: none;
+  }
+
+  .option.selected .checkmark {
+    display: block;
+  }
+
+  .next-btn {
+    background: #000;
+    color: #fff;
+    border: none;
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    border-radius: 30px;
+    margin-top: 30px;
+    cursor: pointer;
+  }
+
+  .small-link {
+    color: #0070f3;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .top-text {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #555;
+    font-size: 15px;
+  }
+</style>
+</head>
+<body>
+
+<h2>Payment type</h2>
+<p class="top-text">We'll save this for all payments to Brian. You can change this on the review screen.</p>
+
+<div class="option" id="goods">
+  <div class="option-icon">🛍</div>
+  <div class="option-content">
+    <div class="option-title">For goods and services</div>
+    <div class="option-desc">
+      Get a full refund if an eligible item gets lost or damaged.<br>
+      Seller pays a small fee.<br>
+      <a href="#" class="small-link">More on Purchase Protection</a>
+    </div>
+  </div>
+  <div class="checkmark">✔</div>
+</div>
+
+<div class="option" id="friends">
+  <div class="option-icon">👥</div>
+  <div class="option-content">
+    <div class="option-title">For friends and family</div>
+    <div class="option-desc">
+      Purchase Protection doesn't apply for this payment.
+    </div>
+  </div>
+  <div class="checkmark">✔</div>
+</div>
+
+<button class="next-btn" onclick="goNext()">Next</button>
+
+<script>
+  let selectedOption = null;
+
+  document.getElementById('goods').addEventListener('click', function() {
+    selectOption('goods');
+  });
+
+  document.getElementById('friends').addEventListener('click', function() {
+    selectOption('friends');
+  });
+
+  function selectOption(option) {
+    if (option === 'goods') {
+      document.getElementById('goods').classList.add('selected');
+      document.getElementById('friends').classList.remove('selected');
+    } else {
+      document.getElementById('friends').classList.add('selected');
+      document.getElementById('goods').classList.remove('selected');
+    }
+    selectedOption = option;
+  }
+
+  function goNext() {
+    if (!selectedOption) {
+      alert('Please select a payment type.');
+      return;
+    }
+    // Redirect to next page (replace with your real URL)
+    window.location.href = 'next1.html';
+  }
+</script>
+
+</body>
+</html>
