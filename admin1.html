@@ -67,7 +67,6 @@
   <ul id="requestsList">Loading...</ul>
 
   <div id="arrowContainer">
-    <button id="adminArrow" title="Go to Admin2">&#10148;</button>
     <button id="uploadArrow" title="Go to Upload">&#10148;</button>
   </div>
 
@@ -127,10 +126,6 @@
           list.appendChild(li);
         });
       });
-
-    document.getElementById('adminArrow').addEventListener('click', () => {
-      window.location.href = "admin2.html";
-    });
 
     document.getElementById('uploadArrow').addEventListener('click', () => {
       window.location.href = "upload.html";
